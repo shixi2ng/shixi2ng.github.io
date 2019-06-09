@@ -24,11 +24,7 @@
     <meta name="twitter:image:src" content="https://spark.adobe.com/page/jXxnCAJzs2ZXY/embed.jpg?buster=1560122515693">
     <meta name="twitter:description" content="A story told with Adobe Spark">
 
-    <link rel="apple-touch-icon" href="https://spark.adobe.com/page/jXxnCAJzs2ZXY/embed.jpg?buster=1560122515693">
-    <link rel="shortcut icon" href="https://d6uhzlpot4xwe.cloudfront.net/runtime/1.22/images/favicon.ico">
 
-    <meta property="fb:app_id" content="919039361464473">
-    <meta name="twitter:site" content="@AdobeSpark">
 
     <script src="https://d6uhzlpot4xwe.cloudfront.net/runtime/1.22/base-fonts.gz.js"></script>
     <script src="https://d6uhzlpot4xwe.cloudfront.net/runtime/1.22/font-subgroup-kits/ltc-bodoni-175.gz.js"></script>
