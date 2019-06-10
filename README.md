@@ -1573,9 +1573,6 @@ underline;
     <!--END-BUMPER-STYLE-SHEET-->
 </head>
 <body class="">
-  <div id="app">
-    <div id="publication-viewer" class="publication-viewer">
-      <div id="luca-splash" class="splash">
         <div class="background" style="background-image: url(images/5224f46e-5a69-42ae-9f89-c84de3f08691.jpg?asset_id=c81102f9-ad1f-444e-b541-e8bdcdbcdd87&img_etag=67af05e12311bac06327b43ca31e166b&size=1024); background-position: 50% 50%;"></div>
         <div class="content">
           <div class="logo"></div>
