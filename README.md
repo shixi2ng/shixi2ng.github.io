@@ -1,565 +1,521 @@
 
 <!DOCTYPE html>
 <html>
-<body class="">
-        <div class="background" style="background-image: url(images/5224f46e-5a69-42ae-9f89-c84de3f08691.jpg?asset_id=c81102f9-ad1f-444e-b541-e8bdcdbcdd87&img_etag=67af05e12311bac06327b43ca31e166b&size=1024); background-position: 50% 50%;"></div>
-        <div class="content">
-          <div class="logo"></div>
-          <div class="loading-label">Loading</div>
-          <div class="wp-progress-bar">
-            <div class="wp-progress-bar-clip">
-              <div class="wp-progress-bar-view"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-            <div class="publication-view">
-        <div class="wp-swipe-panel-group">
-          <div class="wp-swipe-panel-group-view">
-              <div class="wp-swipe-panel-group-panel article-panel">
-                <div class="article chic-theme sections-article-layout" data-article-type="sections-article">
-        <div class="section title-section title-center"  data-section-behavior="chic-title"  data-layer="1" data-layer-name="over" data-scroll-after-animation="false">
-        <div class="section-view">
-          <div class="section-background">
-            <div role="img" class="section-background-image" style="background-position: 50% 50%;"><a class="background-image-placeholder-link" href="images/5224f46e-5a69-42ae-9f89-c84de3f08691.jpg?asset_id=c81102f9-ad1f-444e-b541-e8bdcdbcdd87&img_etag=67af05e12311bac06327b43ca31e166b&size=1024" data-image-width="2560" data-image-height="1703"></a></div>
-          </div>
-          <div class="title-header">
-            <h2 class="title-header-view">
-                <span class="gradient-overlay"></span>
-                <span class="title">Wenyu Lu</span>
-                <span class="subtitle">luwenyu97@outlook.com</span>
-            </h2>
-          </div>
-          <div class="navigation-hint down"></div>
-        </div>
-      </div>
-      <div class="section single-column-section  single-item-content-section large-content-spacing-top large-content-spacing-bottom" data-section-behavior="chic-single-column" data-layer="0" data-layer-name="over">
-        <div class="section-view">
-          <div class="section-content">
-            <div class="section-content-view">
-              <div class="content-container">
-                          <h3 class=" text-center" >教育经历 | EDUCATION</h3>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <!-- 添加搜索关键字 -->
+  <meta name="keywords" content="梦回少年,梦回,saber,lemonjing,少年">
+
+  <title>【Spark】Spark Streaming中复杂的多流Join方案的一个实现 | 梦回少年</title>
+  <meta name="description" content="问题：多个不同流根据一定规则join的问题（例如：网约车中订单发单流与接单流join问题）">
+
+  <link rel="stylesheet" href="/assets/css/bootstrap.css">
+  <link rel="stylesheet" href="/assets/css/font-awesome.css">
+  <link rel="stylesheet" href="/assets/css/main.css" >
+  <link rel="stylesheet" href="/assets/gitment/default.css" >
+  <link rel="stylesheet" href="/assets/js/prettify/prettify.css">
+  <link rel="shortcut icon" href="/assets/img/favicon.ico" />
+  <link rel="canonical" href="http://rann.cc/2018/05/23/spark-streaming-stream-join.html">
+  <link rel="alternate" type="application/rss+xml" title="梦回少年" href="http://rann.cc/feed.xml" />
+  <script src="/assets/gitment/gitment.browser.js"></script>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+    <div class="container">
+        <div class="row">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="navbar-header col-xs-12 col-sm-12 col-md-3 col-lg-3 center">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#example-navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div class="sitehome">
+                        <a href="/" title="首页"><i class="fa fa-home fa-2x homeicon"></i><a><a class="site-title" href="/">梦回少年</a>
                     </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="section single-column-section split-layout image-on-left" data-section-behavior="chic-split-layout" data-layer="0" data-layer-name="over">
-        <div class="section-view">
-          <div class="section-background">
-             <div class="section-background-image" style="background-position: 50% 50%;"><a class="background-image-placeholder-link" href="images/7e2ab58c-07cb-4395-a86d-230f6b3f4d9c.jpg?asset_id=307e99ee-edc1-49ff-b6f4-3ab1ccff8eaf&amp;img_etag=275c799e7fa20e7953b18836d2a22371&amp;size=1024" data-image-width="2560" data-image-height="1439"></a></div>
-          </div>
-          <div class="section-content">
-            <div class="section-content-view">
-              <div class="content-container">
-                          <h4 class=" " >爱丁堡大学 |University of Edinburgh</h4>
-                                <p class=" " >地理信息科学 | GIS（2018. 9 - 至今）</p>
-                                <p class=" " >GPA: 3.5&#x2F;4.0 （暂无论文成绩）</p>
-                                <p class=" " >主要课程：</p>
-                            <ul>
-                    <li class=" " >GIS技术基础</li>
-                                <li class=" " >遥感原理与实验</li>
-                                <li class=" " >空间模型分析</li>
-                                <li class=" " >视觉分析</li>
-                                <li class=" " >环境建模</li>
-                            </ul>
-                    </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="section spacer-section content-spacer" data-section-behavior="chic-spacer" data-layer-name="over">
-      </div>
-      <div class="section single-column-section split-layout image-on-right" data-section-behavior="chic-split-layout" data-layer="0" data-layer-name="over">
-        <div class="section-view">
-          <div class="section-background">
-             <div class="section-background-image" style="background-position: 50.52083492279053% 67.15400205021017%;"><a class="background-image-placeholder-link" href="images/01b67893-227d-499b-b5d4-6ae12fa00571.jpg?asset_id=f87f9bc5-3e2a-4873-8f00-c17b8b2a5620&amp;img_etag=d245575767c1b4b66301a32c054a5536&amp;size=1024" data-image-width="2560" data-image-height="1768"></a></div>
-          </div>
-          <div class="section-content">
-            <div class="section-content-view">
-              <div class="content-container">
-                          <h4 class=" " >中南林业科技大学 | Central South University of Forestry and Technology</h4>
-                                <p class=" " >地理信息科学 | GIS （2014. 9 - 2018. 6）</p>
-                                <p class=" " >GPA: 3.84&#x2F;5.0 (专业排名第一) </p>
-                                <p class=" " >主要课程：</p>
-                            <ul>
-                    <li class=" " >数据库（93&#x2F;100）</li>
-                                <li class=" " >常用地图API的LBS开发 （97&#x2F;100）</li>
-                                <li class=" " >Java语言（92&#x2F;100）</li>
-                                <li class=" " >计算机图形学（95&#x2F;100）</li>
-                                <li class=" " >面向对象程序设计（90&#x2F;100）</li>
-                                <li class=" " >地图设计与编绘（99&#x2F;100）</li>
-                            </ul>
-                    </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="section single-column-section  single-item-content-section large-content-spacing-top large-content-spacing-bottom" data-section-behavior="chic-single-column" data-layer="0" data-layer-name="over">
-        <div class="section-view">
-          <div class="section-content">
-            <div class="section-content-view">
-              <div class="content-container">
-                          <h4 class=" text-center" >—— ——</h4>
-                    </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="section window-section height-50 caption-left" data-section-behavior="chic-window" data-layer="0" data-layer-name="over">
-        <div class="section-view">
-          <div class="window section-background">
-            <div role="img" class="section-background-image" style="background-position: 50% 50%;"><a class="background-image-placeholder-link" href="images/1421475f-ffb8-4e86-822b-d6b5000c89af.jpg?asset_id=fa3e380a-4785-492f-aa46-c36a4b39c822&img_etag=af77f38240b29cf90217473fdcb5b70f&size=1024" data-image-width="2560" data-image-height="1706"></a></div>
-          </div>
-        </div>
-      </div>
-      <div class="section single-column-section  large-content-spacing-top" data-section-behavior="chic-single-column" data-layer="0" data-layer-name="over">
-        <div class="section-view">
-          <div class="section-content">
-            <div class="section-content-view">
-              <div class="content-container">
-                          <h3 class=" text-center" >获奖与证书 | Achievements获奖：</h3>
-                                <p class=" text-left" ><b>获奖经历：</b></p>
-                            <ul>
-                    <li class=" " >中南林业科技大学2018优秀毕业生</li>
-                                <li class=" " >2016&#x2F;17 学年乙等优秀奖学金</li>
-                                <li class=" " >2015&#x2F;16 学年丙等校级优秀奖学金</li>
-                                <li class=" " >2015&#x2F;16 学年优秀学生干部</li>
-                                <li class=" " >2015 “陶铸杯” 辩论赛院级金奖</li>
-                            </ul>
-                    <p class=" " ><b>资格证书：</b></p>
-                            <ul>
-                    <li class=" " >国家计算机二级（C语言）：优秀</li>
-                                <li class=" " >CET 6 ： 535</li>
-                                <li class=" " >普通话： 二甲</li>
-                            </ul>
-                    </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="section photo-grid-section  large-content-spacing-bottom" data-section-behavior="chic-photo-grid" data-layer-name="over">
-        <div class="section-view">
-          <div class="section-content">
-            <div class="section-content-view">
-              <div class="content-container">
-                <div class="photo-grid">
-                  <div class="photo-group-container">
-                    <div class="photo-group t3-layout-lll-1">
-                      <div class="photo-container tile">
-                        <a aria-label="thumbnail image" class="photo-image" href="images/6f52c9a6-4c11-4924-956b-0cee67648073.jpg?asset_id=e3a8a647-6371-46e5-8233-dc1dbf49ed3c&img_etag=aa2df65448c62090d5fb0165d70326ed&size=706" data-src="images/6f52c9a6-4c11-4924-956b-0cee67648073.jpg?asset_id=e3a8a647-6371-46e5-8233-dc1dbf49ed3c&img_etag=aa2df65448c62090d5fb0165d70326ed&size=706" data-image-width="706" data-image-height="511"><span class="background-image-placeholder-link" data-href="images/6f52c9a6-4c11-4924-956b-0cee67648073.jpg?asset_id=e3a8a647-6371-46e5-8233-dc1dbf49ed3c&img_etag=aa2df65448c62090d5fb0165d70326ed&size=512"></span></a>
-                      </div>
-                      <div class="photo-container tile">
-                        <a aria-label="thumbnail image" class="photo-image" href="images/c77813c3-5400-4283-aeb8-09919b09163b.jpg?asset_id=e7b30d07-32fb-4e55-8db7-e8e03af2a0de&img_etag=2c517cd92a42c6f79be89e6fd67f78d4&size=721" data-src="images/c77813c3-5400-4283-aeb8-09919b09163b.jpg?asset_id=e7b30d07-32fb-4e55-8db7-e8e03af2a0de&img_etag=2c517cd92a42c6f79be89e6fd67f78d4&size=721" data-image-width="721" data-image-height="511"><span class="background-image-placeholder-link" data-href="images/c77813c3-5400-4283-aeb8-09919b09163b.jpg?asset_id=e7b30d07-32fb-4e55-8db7-e8e03af2a0de&img_etag=2c517cd92a42c6f79be89e6fd67f78d4&size=512"></span></a>
-                      </div>
-                      <div class="photo-container tile">
-                        <a aria-label="thumbnail image" class="photo-image" href="images/c1a6f739-17a8-44af-83d3-fc49b60f2f61.jpg?asset_id=a73329d5-e08f-4055-a864-04e18dfcbb78&img_etag=952c15f4a2b6ca7d354d2588a821a23a&size=671" data-src="images/c1a6f739-17a8-44af-83d3-fc49b60f2f61.jpg?asset_id=a73329d5-e08f-4055-a864-04e18dfcbb78&img_etag=952c15f4a2b6ca7d354d2588a821a23a&size=671" data-image-width="671" data-image-height="511"><span class="background-image-placeholder-link" data-href="images/c1a6f739-17a8-44af-83d3-fc49b60f2f61.jpg?asset_id=a73329d5-e08f-4055-a864-04e18dfcbb78&img_etag=952c15f4a2b6ca7d354d2588a821a23a&size=512"></span></a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="photo-group-container">
-                    <div class="photo-group t1-layout-l-1">
-                      <div class="photo-container tile">
-                        <a aria-label="thumbnail image" class="photo-image" href="images/92167e25-354d-4d0c-8ed3-2ceb73661f4d.jpg?asset_id=ef8823ab-211a-4e9f-9c3f-e86ce5051b9a&img_etag=065a68094cc40a87cf586bf2dea037f6&size=512" data-src="images/92167e25-354d-4d0c-8ed3-2ceb73661f4d.jpg?asset_id=ef8823ab-211a-4e9f-9c3f-e86ce5051b9a&img_etag=065a68094cc40a87cf586bf2dea037f6&size=512" data-image-width="512" data-image-height="391"><span class="background-image-placeholder-link" data-href="images/92167e25-354d-4d0c-8ed3-2ceb73661f4d.jpg?asset_id=ef8823ab-211a-4e9f-9c3f-e86ce5051b9a&img_etag=065a68094cc40a87cf586bf2dea037f6&size=512"></span></a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="photo-group-container">
-                    <div class="photo-group t3-layout-llp-1">
-                      <div class="photo-container tile">
-                        <a aria-label="thumbnail image" class="photo-image" href="images/ab672756-101d-4d5f-8c3d-40843c3909c5.jpg?asset_id=a9c063a3-868b-4f93-8d0a-05fa4e5e9af8&img_etag=c914d53a5d9e647e001e69953c881723&size=512" data-src="images/ab672756-101d-4d5f-8c3d-40843c3909c5.jpg?asset_id=a9c063a3-868b-4f93-8d0a-05fa4e5e9af8&img_etag=c914d53a5d9e647e001e69953c881723&size=512" data-image-width="512" data-image-height="392"><span class="background-image-placeholder-link" data-href="images/ab672756-101d-4d5f-8c3d-40843c3909c5.jpg?asset_id=a9c063a3-868b-4f93-8d0a-05fa4e5e9af8&img_etag=c914d53a5d9e647e001e69953c881723&size=512"></span></a>
-                      </div>
-                      <div class="photo-container tile">
-                        <a aria-label="thumbnail image" class="photo-image" href="images/f0a1cf75-a565-459a-a917-e31f98d89466.jpg?asset_id=9ba1c6dd-2bef-42d7-9aaf-b0b09ce07cc8&img_etag=7e10014f25d077adc41dd94907f206f0&size=808" data-src="images/f0a1cf75-a565-459a-a917-e31f98d89466.jpg?asset_id=9ba1c6dd-2bef-42d7-9aaf-b0b09ce07cc8&img_etag=7e10014f25d077adc41dd94907f206f0&size=808" data-image-width="808" data-image-height="511"><span class="background-image-placeholder-link" data-href="images/f0a1cf75-a565-459a-a917-e31f98d89466.jpg?asset_id=9ba1c6dd-2bef-42d7-9aaf-b0b09ce07cc8&img_etag=7e10014f25d077adc41dd94907f206f0&size=512"></span></a>
-                      </div>
-                      <div class="photo-container tile">
-                        <a aria-label="thumbnail image" class="photo-image" href="images/7b630c67-e1e0-4d79-862e-c5f9f06c7853.jpg?asset_id=a7e59b83-f0ef-4eb9-8d96-f4ea40f2d052&img_etag=c627a7187848d65113b885009a0e878f&size=829" data-src="images/7b630c67-e1e0-4d79-862e-c5f9f06c7853.jpg?asset_id=a7e59b83-f0ef-4eb9-8d96-f4ea40f2d052&img_etag=c627a7187848d65113b885009a0e878f&size=829" data-image-width="511" data-image-height="829"><span class="background-image-placeholder-link" data-href="images/7b630c67-e1e0-4d79-862e-c5f9f06c7853.jpg?asset_id=a7e59b83-f0ef-4eb9-8d96-f4ea40f2d052&img_etag=c627a7187848d65113b885009a0e878f&size=512"></span></a>
-                      </div>
-                    </div>
-                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="section window-section height-50 caption-left" data-section-behavior="chic-window" data-layer="0" data-layer-name="over">
-        <div class="section-view">
-          <div class="window section-background">
-            <div role="img" class="section-background-image" style="background-position: 50% 50%;"><a class="background-image-placeholder-link" href="images/c4fc6dfc-03d5-4772-9055-1d8b0e6b920e.jpg?asset_id=5fb9362d-671e-477c-b1fc-3471272e4b68&img_etag=1221a744799b87fe836e1acfca3de676&size=1024" data-image-width="2560" data-image-height="1440"></a></div>
-          </div>
-        </div>
-      </div>
-      <div class="section single-column-section  single-item-content-section large-content-spacing-top large-content-spacing-bottom bottom-shadow" data-section-behavior="chic-single-column" data-layer="0" data-layer-name="over">
-        <div class="section-view">
-          <div class="section-content">
-            <div class="section-content-view">
-              <div class="content-container">
-                          <h3 class=" text-center" >项目经历 | Projects</h3>
+                <div class="col-md-6 col-lg-6 hidden-xs hidden-sm center">
+                    <nav class="site-nav">
+                        <ul class="nav nav-pills">
+                            <li class="select"><a class="page-link pjaxlink" href="/pages/read.html">读书</a></li>
+                            <li class="select"><a class="page-link pjaxlink" href="/pages/class.html">分类</a></li>
+                            <!-- <li class="select"><a class="page-link pjaxlink" href="/pages/tags.html">标签</a></li> -->
+                            <li class="select"><a class="page-link pjaxlink" href="/pages/archive.html">归档</a></li>
+                            <li class="select"><a class="page-link pjaxlink" href="/pages/about.html">关于</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <!-- swifttype 搜索 弃用-->
+               <!--  <div class="col-md-3 col-lg-3 hidden-xs hidden-sm">
+                    <div class="search">
+                        <input type="text" class="search-query st-default-search-input" placeholder="Search">
                     </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="section card-flipbook-section" data-section-behavior="chic-column-overlay" data-spacing=".75" data-layer="-1" data-layer-name="under">
-        <div class="section-view">
-          <div class="section-background">
-            <div role="img" class="section-background-image" style=" background-position: 50% 50%;" data-pan-and-zoom="zoom-in"><a class="background-image-placeholder-link" href="images/03192d30-e96a-4ae1-99b6-a940bd500114.jpg?asset_id=7db1b488-7082-4d86-acf6-74a6feb8cc1e&img_etag=d750e8533d6266de05b3a47fe5207f34&size=1024" data-image-width="1024" data-image-height="358"></a></div>
-            <div role="img" class="section-background-image" style=" background-position: 15.78125000000001% 67.55829694666816%;" data-pan-and-zoom="zoom-in"><a class="background-image-placeholder-link" href="images/c050ac7c-e881-4a0e-9634-02807e781694.jpg?asset_id=6a66d0a8-721d-4410-8c58-0b3d238884e2&img_etag=3e02bf341a1e369c6fb0ab38bfd01a4d&size=1024" data-image-width="1024" data-image-height="683"></a></div>
-            <div role="img" class="section-background-image" style=" background-position: 50% 50%;" data-pan-and-zoom="zoom-in"><a class="background-image-placeholder-link" href="images/3f3bb21d-8e07-4eb7-a5b2-8ffa59d4e1ea.jpg?asset_id=e57ca2a4-1696-428f-a409-ae5164a6c477&img_etag=1fedd9eec5515eaf242d4ab8bba87823&size=1024" data-image-width="1024" data-image-height="681"></a></div>
-            <div role="img" class="section-background-image" style=" background-position: 18.385415077209473% 61.69590643274854%;" data-pan-and-zoom="zoom-in"><a class="background-image-placeholder-link" href="images/331431da-cb3a-47f6-a6e3-6b85b3ec3601.jpg?asset_id=4bc2b292-9afc-44fa-8b0e-90135c4b97bd&img_etag=7a3648d1e79977a8cfc72e98c1b8739c&size=1024" data-image-width="1024" data-image-height="681"></a></div>
-          </div>
-          <div class="section-content">
-            <div class="section-content-view card-center">
-              <div class="content-container">
-                          <h4 class=" text-center" >I. 考古点数据可视化</h4>
-                            <ul>
-                    <li class=" " ><b>数据库设计</b>：根据数据结构特点，确定采用关系型数据库，并设计其间表结构；</li>
-                                <li class=" " ><b>数据录入</b>：使用SQLPLUS语言，及SQL*LOADER工具进行数据录入；</li>
-                                <li class=" " ><b>数据展示</b>：使用Python3完成数据库连接，使用HTML、CSS进行网页的构建，并运用JavaScript进行简单交互；</li>
-                            </ul>
-                <div class="image">
-                  <div class="image-wrapper">
-                    <a href="images/25e5d105-b868-4cfc-ac35-6f937b43e8c9.jpg?asset_id=b0ad8cfd-2e87-43d7-acf2-f05217a9b868&amp;img_etag=1240f2380465efdfdf63b8f3168d921a&amp;size=1024" class="image-viewer-link" target="_blank" rel="nofollow noreferrer"><span class="image-placeholder-link" data-href="images/25e5d105-b868-4cfc-ac35-6f937b43e8c9.jpg?asset_id=b0ad8cfd-2e87-43d7-acf2-f05217a9b868&amp;img_etag=1240f2380465efdfdf63b8f3168d921a&amp;size=1024" style="width: 1730px; padding-top: 48.786127167630056%" data-image-width="1730" data-image-height="844"></span></a>
-                  </div>
-                    <div class="caption ">网页截图</div>
-                </div>
-                              <div class="link-button-wrapper link-center">
-                    <a class="link-button "  href="https://www.geos.ed.ac.uk/~s1824121/cgi-bin/webassignment/SVG.py" rel="nofollow noreferrer">点此访问该网页</a>
-                  </div>
+                </div> -->
+                 <!-- /swifttype 搜索 -->
+                <div class="col-md-3 col-lg-3 hidden-xs hidden-sm">
+                    <div style="position: fixed; top:10px;">
+                        <img src="/search/img/cb-search.png" id="cb-search-btn" title="双击ctrl试一下" />
                     </div>
-            </div>
-            <div class="section-content-view card-right">
-              <div class="content-container">
-                          <h4 class=" text-center" >II. 苏格兰狼群重引进</h4>
-                            <ul>
-                    <li class=" " ><b>聚居地模型建立：</b>与组员共同确定狼群生活影响因素，并独立利用ArcGIS模拟出苏格兰最佳狼群聚居地范围及研究区附近狼类迁移路径；</li>
-                            </ul>
-                <div class="image">
-                  <div class="image-wrapper">
-                    <a href="images/5c855c3d-3a8b-4548-8789-74db424e0e5a.jpg?asset_id=3d7823d2-a597-4e01-9017-83d66cdf8405&amp;img_etag=4a9eb4a70f0d36a3f86d20986f4367cb&amp;size=1024" class="image-viewer-link" target="_blank" rel="nofollow noreferrer"><span class="image-placeholder-link" data-href="images/5c855c3d-3a8b-4548-8789-74db424e0e5a.jpg?asset_id=3d7823d2-a597-4e01-9017-83d66cdf8405&amp;img_etag=4a9eb4a70f0d36a3f86d20986f4367cb&amp;size=1024" style="width: 1870px; padding-top: 141.3903743315508%" data-image-width="1870" data-image-height="2644"></span></a>
-                  </div>
-                    <div class="caption ">狼类苏格兰聚居地预测图</div>
                 </div>
-                            <div class="image">
-                  <div class="image-wrapper">
-                    <a href="images/01e1f6fa-a6e0-43e8-ba04-9c96e1936e83.jpg?asset_id=28c9501c-8393-4374-ada2-f780421a9060&amp;img_etag=f0950a53e06b139f1a37e6a424293670&amp;size=1024" class="image-viewer-link" target="_blank" rel="nofollow noreferrer"><span class="image-placeholder-link" data-href="images/01e1f6fa-a6e0-43e8-ba04-9c96e1936e83.jpg?asset_id=28c9501c-8393-4374-ada2-f780421a9060&amp;img_etag=f0950a53e06b139f1a37e6a424293670&amp;size=1024" style="width: 1753px; padding-top: 149.91443240159725%" data-image-width="1753" data-image-height="2628"></span></a>
-                  </div>
-                    <div class="caption ">狼类迁移路径预测图</div>
-                </div>
-                            <ul>
-                    <li class=" " ><b>聚居地考察：</b>深入苏格兰高地，考察狼群聚居地生态条件并共同修缮模型；</li>
-                            </ul>
-                <div class="image">
-                  <div class="image-wrapper">
-                    <a href="images/668ebbaf-106b-47c4-b54f-7ed9502ff66f.jpg?asset_id=d2565181-c06f-4c23-abc5-f922717f1ead&amp;img_etag=e428c7271847f0189e903f8618f3cc17&amp;size=1024" class="image-viewer-link" target="_blank" rel="nofollow noreferrer"><span class="image-placeholder-link" data-href="images/668ebbaf-106b-47c4-b54f-7ed9502ff66f.jpg?asset_id=d2565181-c06f-4c23-abc5-f922717f1ead&amp;img_etag=e428c7271847f0189e903f8618f3cc17&amp;size=1024" style="width: 2560px; padding-top: 56.25%" data-image-width="2560" data-image-height="1440"></span></a>
-                  </div>
-                    <div class="caption ">小组成员考察图</div>
-                </div>
-                                <p class=" " ><b>自制一分钟精简考察VLOG：</b></p>
-                              <div class="link-button-wrapper link-left">
-                    <a class="link-button "  href="https://www.bilibili.com/video/av42820412?from=search&seid=13271149047430174716" rel="nofollow noreferrer">点此观看</a>
-                  </div>
+                   
+                    <div class="collapse navbar-collapse" id="example-navbar-collapse">
+                        <ul class="nav navbar-nav phone-nav center">
+                            <li class="phoneselect"><a class="page-link pjaxlink" href="/"><i class="fa fa-home"></i>&nbsp;首页</a></li>
+                            <li class="phoneselect"><a class="page-link pjaxlink" href="/pages/read.html"><i class="fa fa-book"></i>&nbsp;读书</a></li>
+                            <li class="phoneselect"><a class="page-link pjaxlink" href="/pages/class.html"><i class="fa fa-tasks"></i>&nbsp;分类</a></li>
+                            <li class="phoneselect"><a class="page-link pjaxlink" href="/pages/tags.html"><i class="fa fa-tags"></i>&nbsp;标签</a></li>
+                            <li class="phoneselect"><a class="page-link pjaxlink" href="/pages/archive.html"><i class="fa fa-archive"></i>&nbsp;归档</a></li>
+                            <li class="phoneselect"><a class="page-link pjaxlink" href="/pages/about.html"><i class="fa fa-user"></i>&nbsp;关于</a></li>
+                        </ul>
                     </div>
+            </nav>
             </div>
-            <div class="section-content-view card-center">
-              <div class="content-container">
-                          <h4 class=" text-center" >III. 苏格兰衰退指数（SIMD）模型完善</h4>
-                                <p class=" text-left" ><b>背景：</b>在已有的以人类社会因素为要素所得的SIMD模型基础上 ， 以苏格兰中部地区为研究区，综合分析多种影响人类生存状态的环境因素。</p>
-                            <ul>
-                    <li class=" " ><b>各环境因素独立分析：</b></li>
-                            </ul>
-                <div class="image">
-                  <div class="image-wrapper">
-                    <a href="images/3f9c1c13-3369-4cf3-90dc-43d82b9246c6.jpg?asset_id=bd649c92-c95e-4926-8d69-8a78c5eb1989&amp;img_etag=67e33409d287f0cb09740a3352d06f84&amp;size=1024" class="image-viewer-link" target="_blank" rel="nofollow noreferrer"><span class="image-placeholder-link" data-href="images/3f9c1c13-3369-4cf3-90dc-43d82b9246c6.jpg?asset_id=bd649c92-c95e-4926-8d69-8a78c5eb1989&amp;img_etag=67e33409d287f0cb09740a3352d06f84&amp;size=1024" style="width: 1040px; padding-top: 69.23076923076923%" data-image-width="1040" data-image-height="720"></span></a>
-                  </div>
-                    <div class="caption ">空气污染度图</div>
-                </div>
-                            <div class="image">
-                  <div class="image-wrapper">
-                    <a href="images/283f6609-c5c6-4337-b419-2163d6765c36.jpg?asset_id=aaadbe30-90fa-4b3c-8016-433fe87f5968&amp;img_etag=d689c29275ba58ad04b968f313b78c08&amp;size=1024" class="image-viewer-link" target="_blank" rel="nofollow noreferrer"><span class="image-placeholder-link" data-href="images/283f6609-c5c6-4337-b419-2163d6765c36.jpg?asset_id=aaadbe30-90fa-4b3c-8016-433fe87f5968&amp;img_etag=d689c29275ba58ad04b968f313b78c08&amp;size=1024" style="width: 1040px; padding-top: 69.23076923076923%" data-image-width="1040" data-image-height="720"></span></a>
-                  </div>
-                    <div class="caption ">噪声污染度图</div>
-                </div>
-                            <div class="image">
-                  <div class="image-wrapper">
-                    <a href="images/eb7319e6-1fd9-4062-a0a2-4313c28928b4.jpg?asset_id=d8b80c2d-dbb4-44b4-85ee-dee25eb05a8d&amp;img_etag=6c35422afe9da688ff18dc5da20fed0c&amp;size=1024" class="image-viewer-link" target="_blank" rel="nofollow noreferrer"><span class="image-placeholder-link" data-href="images/eb7319e6-1fd9-4062-a0a2-4313c28928b4.jpg?asset_id=d8b80c2d-dbb4-44b4-85ee-dee25eb05a8d&amp;img_etag=6c35422afe9da688ff18dc5da20fed0c&amp;size=1024" style="width: 1040px; padding-top: 69.23076923076923%" data-image-width="1040" data-image-height="720"></span></a>
-                  </div>
-                    <div class="caption ">污水污染指数图</div>
-                </div>
-                            <div class="image">
-                  <div class="image-wrapper">
-                    <a href="images/3160d117-9a16-4ea9-99bd-6c193d4be77f.jpg?asset_id=9fbe0204-a052-4004-a3d2-2445ed86e569&amp;img_etag=b53332a5cc5cd6129e5697f04c8c356b&amp;size=1024" class="image-viewer-link" target="_blank" rel="nofollow noreferrer"><span class="image-placeholder-link" data-href="images/3160d117-9a16-4ea9-99bd-6c193d4be77f.jpg?asset_id=9fbe0204-a052-4004-a3d2-2445ed86e569&amp;img_etag=b53332a5cc5cd6129e5697f04c8c356b&amp;size=1024" style="width: 1040px; padding-top: 69.23076923076923%" data-image-width="1040" data-image-height="720"></span></a>
-                  </div>
-                    <div class="caption ">城市绿化指数图</div>
-                </div>
-                            <div class="image">
-                  <div class="image-wrapper">
-                    <a href="images/57d7aa93-3f92-430a-8f76-92765913cd8c.jpg?asset_id=aee8b745-a603-4632-95f5-51c5842fcbe8&amp;img_etag=a3b74780514f4b06643c5c4b078833cf&amp;size=1024" class="image-viewer-link" target="_blank" rel="nofollow noreferrer"><span class="image-placeholder-link" data-href="images/57d7aa93-3f92-430a-8f76-92765913cd8c.jpg?asset_id=aee8b745-a603-4632-95f5-51c5842fcbe8&amp;img_etag=a3b74780514f4b06643c5c4b078833cf&amp;size=1024" style="width: 1040px; padding-top: 69.23076923076923%" data-image-width="1040" data-image-height="720"></span></a>
-                  </div>
-                    <div class="caption ">郊区绿地指数图</div>
-                </div>
-                            <ul>
-                    <li class=" " ><b>综合数据并对比：</b>利用AHP进行各要素权重判定，综合数据后得出最终环境方向SIMD区域排名结果，并与已有SIMD数据区域排名进行对比，回归分析后发现两者并无明显相关性存在。所以得出衰退指数单考虑社会因素是不合理的，环境要素与其并无重复性，应同时考虑在内。</li>
-                            </ul>
-                    <p class=" " >想了解更多SIMD相关信息？见下方:</p>
-                              <div class="link-button-wrapper link-left">
-                    <a class="link-button "  href="http://simd.scot/2016/#/simd2016/BTTTFTT/9/-4.0000/55.9000/" rel="nofollow noreferrer">SIMD 2016</a>
-                  </div>
-                    </div>
-            </div>
-            <div class="section-content-view card-right">
-              <div class="content-container">
-                          <h4 class=" text-center" >IV. 尼泊尔冰川湖洪水页面宣传</h4>
-                            <ul>
-                    <li class=" " >使用ArcGIS Online制作用于宣传的冰川湖地图</li>
-                                <li class=" " >使用ESRI的Story Map，利用其强大的页内在线交互地图，进行地理要素的直观展示。使宣传更加简单通俗</li>
-                            </ul>
-                <div class="image">
-                  <div class="image-wrapper">
-                    <a href="images/98337235-9083-4900-94ee-2889a8c599f1.jpg?asset_id=52b17a6a-bec3-4213-bbde-53bae16a1b35&amp;img_etag=e82a9cec5cf8214271099728e6cb0772&amp;size=1024" class="image-viewer-link" target="_blank" rel="nofollow noreferrer"><span class="image-placeholder-link" data-href="images/98337235-9083-4900-94ee-2889a8c599f1.jpg?asset_id=52b17a6a-bec3-4213-bbde-53bae16a1b35&amp;img_etag=e82a9cec5cf8214271099728e6cb0772&amp;size=1024" style="width: 1878px; padding-top: 45.89989350372737%" data-image-width="1878" data-image-height="862"></span></a>
-                  </div>
-                    <div class="caption ">尼泊尔冰川湖洪水地图页面</div>
-                </div>
-                                <p class=" text-center" ><b>详细了解见下链接：</b></p>
-                              <div class="link-button-wrapper link-center">
-                    <a class="link-button "  href="https://edgeosci.maps.arcgis.com/apps/Cascade/index.html?appid=f41b1b9aed7c4c4999e08c7faf2c757d" rel="nofollow noreferrer">Story Map 链接</a>
-                  </div>
-                    </div>
-            </div>
-          </div>
         </div>
-      </div>
-      <div class="section single-column-section  large-content-spacing-top top-shadow" data-section-behavior="chic-single-column" data-layer="1" data-layer-name="over">
-        <div class="section-view">
-          <div class="section-content">
-            <div class="section-content-view">
-              <div class="content-container">
-                          <h3 class=" text-center" >实习经历 | INTERNSHIP EXPERIENCE</h3>
-                                <p class=" text-center" ><b>沙溪测绘工程有限公司 实习生</b></p>
-                                <p class=" text-center" >2017. 7 - 2017. 8</p>
-                                <p class=" " >参与建筑等行业3个项目的土地房屋测量工作和数据处理工作，利用ArcGIS和CAD，独立完成部分数据地图及图形的绘制 </p>
-                                <p class=" text-center" >—— ——</p>
-                                <h3 class=" text-center" >校内外活动经历 | CO-CURRICULAR ACTIVITIES</h3>
-                                <p class=" text-center" ><b>校学生会公共关系部 副部长</b></p>
-                                <p class=" text-center" >2015. 5 - 2015. 12</p>
-                            <ul>
-                    <li class=" " >共同带领60人的部门，与社会组织合作并以资金支持学生运动，曾为学生跨年晚会签下价值3万余元的物资支持；</li>
-                                <li class=" " >组织橘子洲团建活动，并邀请本校及长沙其他各高校学生会主席团参与活动；</li>
-                            </ul>
-                    <p class=" text-center" >—— ——</p>
-                                <p class=" text-center" ><b>HOME共享家读诗会 发起人|策划人</b></p>
-                                <p class=" text-center" >2015. 3 - 2015. 9</p>
-                            <ul>
-                    <li class=" " >加入HOME共享家宣传部后，不仅负责电台节目的录制后期，更发起、策划读书会活动，并兼任主持；</li>
-                                <li class=" " >成功邀请中南大学著名中外文学教授等湖南文学社著名作家学者做客分享，利用HOME微信平台进行宣传，并对报名 人员进行筛选，最终选取30余人参加当次活动，保证了读书会的高品质；</li>
-                            </ul>
-                    </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="section photo-grid-section  large-content-spacing-bottom" data-section-behavior="chic-photo-grid" data-layer-name="over">
-        <div class="section-view">
-          <div class="section-content">
-            <div class="section-content-view">
-              <div class="content-container">
-                <div class="photo-grid">
-                  <div class="photo-group-container">
-                    <div class="photo-group t2-layout-pp-1">
-                      <div class="photo-container tile">
-                        <a aria-label="thumbnail image" class="photo-image" href="images/d1967ae4-d848-4a0c-8834-f106cf80b814.jpg?asset_id=fb353b94-4f5f-43ac-988a-04dd7d1b72fc&img_etag=c70f690078d29d072b3d11b74b564dcc&size=682" data-src="images/d1967ae4-d848-4a0c-8834-f106cf80b814.jpg?asset_id=fb353b94-4f5f-43ac-988a-04dd7d1b72fc&img_etag=c70f690078d29d072b3d11b74b564dcc&size=682" data-image-width="511" data-image-height="682"><span class="background-image-placeholder-link" data-href="images/d1967ae4-d848-4a0c-8834-f106cf80b814.jpg?asset_id=fb353b94-4f5f-43ac-988a-04dd7d1b72fc&img_etag=c70f690078d29d072b3d11b74b564dcc&size=512"></span></a>
-                      </div>
-                      <div class="photo-container tile">
-                        <a aria-label="thumbnail image" class="photo-image" href="images/7a0aaa13-853a-49c6-ba9e-ddf9337cf447.jpg?asset_id=4ab7bcbb-5971-42d0-b3c2-ea57140ba564&img_etag=639b9ab06b6d9d84c08325bc46b558ab&size=682" data-src="images/7a0aaa13-853a-49c6-ba9e-ddf9337cf447.jpg?asset_id=4ab7bcbb-5971-42d0-b3c2-ea57140ba564&img_etag=639b9ab06b6d9d84c08325bc46b558ab&size=682" data-image-width="511" data-image-height="682"><span class="background-image-placeholder-link" data-href="images/7a0aaa13-853a-49c6-ba9e-ddf9337cf447.jpg?asset_id=4ab7bcbb-5971-42d0-b3c2-ea57140ba564&img_etag=639b9ab06b6d9d84c08325bc46b558ab&size=512"></span></a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="caption-container">
-                    <div class="grid-caption ">活动照片</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="section window-section height-50 caption-left" data-section-behavior="chic-window" data-layer="0" data-layer-name="over">
-        <div class="section-view">
-          <div class="window section-background">
-            <div role="img" class="section-background-image" style="background-position: 64.53125476837158% 19.070821245278996%;"><a class="background-image-placeholder-link" href="images/982d70c8-ed01-433b-9b81-f49996151e5a.jpg?asset_id=fc6c4da0-ce26-40af-b1db-1e5bf698f6c5&img_etag=5974f7feac8f7e73d6373b143778d524&size=1024" data-image-width="2560" data-image-height="2560"></a></div>
-          </div>
-        </div>
-      </div>
-      <div class="section single-column-section  large-content-spacing-top large-content-spacing-bottom bottom-shadow" data-section-behavior="chic-single-column" data-layer="0" data-layer-name="over">
-        <div class="section-view">
-          <div class="section-content">
-            <div class="section-content-view">
-              <div class="content-container">
-                          <h3 class=" text-center" >技能与特长 | SKILLS AND INTERESTS</h3>
-                            <ul>
-                    <li class=" " ><b>语言能力</b>：英文 中等对话，六级成绩：535</li>
-                                <li class=" " ><b>计算机能力</b>：熟练使用Office，ArcGIS，Python，Oracle，HTML，Adobe Spark，Adobe Photoshop</li>
-                                <li class=" " ><b>兴趣爱好</b>：摄影与海报制作，旅行VLOG剪辑</li>
-                            </ul>
-                    </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="section fullscreen-photo-section  caption-left" data-section-behavior="chic-fullscreen-photo" data-layer="-1" data-layer-name="under" data-zoom-start="" data-zoom-stop="" data-zoom-to="" data-zoom-from="" data-fixed="">
-        <div class="section-view">
-          <div class="section-background">
-            <div role="img" class="section-background-image" style="background-position: 50% 50%;"><a class="background-image-placeholder-link" href="images/fec75fb8-2953-4f73-8dee-75c440b80353.jpg?asset_id=e1323548-8b6f-427a-bf34-baaac8142c76&img_etag=19f3a07aeb26fab46a3a3609865cb711&size=800" data-image-width="800" data-image-height="600"></a></div>
-          </div>
-        </div>
-      </div>
-      <div class="section author-section  top-shadow" data-section-behavior="chic-author" data-layer="1" data-layer-name="over">
-        <div class="section-view">
-          <div class="section-content">
-            <div class="section-content-view">
-              <div class="content-container">
-                <div class="author-appreciation-container">
-                  <div class="author">
-                    <div class="avatar" style="background-image:url(/images/icon-generic-avatar.svg);"></div>
-                    <div class="info">
-                      <div class="label created-by-label">Created By</div>
-                      <div class="name">Vera Lu</div>
-                    </div>
-                  </div>
-                  <a href="https://spark.adobe.com/page/jXxnCAJzs2ZXY" class="button appreciate-button">Appreciate</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="section credits-section" data-section-behavior="chic-credits" data-layer="0" data-layer-name="over">
-        <div class="section-view">
-          <div class="section-content">
-            <div class="section-content-view">
-              <div class="content-container">
-                <div class="photo-credits">
-                  <p class="credits-label">Credits:</p>
-                  <p>Cover with an image by NASA - &quot;untitled image&quot;</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--BUMPER-SECTION-TOP-LEVEL-START-->
-      <div class="section bumper-section default-bumper-section" data-layer-name="over">
-          <div class="section-view">
-              <!--FOOTER-START-->
-              <div class="footer">
-                  <a class="tos" target="_blank" href="http://www.adobe.com/legal/terms.html" rel="nofollow">Terms of Service</a>
-                  <a class="privacy" target="_blank" href="http://www.adobe.com/go/privacy" rel="nofollow">Privacy Policy</a>
-                  <a class="js-report-abuse" href="#" target="_blank" rel="nofollow">Report Abuse</a>
-              </div>
-              <!--FOOTER-END-->
-          </div>
-      </div>
-      <!--BUMPER-SECTION-TOP-LEVEL-END-->
+</header>
+
+
+    <div class="content">
+   	<div class="container">	
+   		<div class="row">
+			<div class="col-md-3 col-lg-3 hidden-xs hidden-sm aside1 fadein-left">
+				<div class="profile box-shadow center">
+					<div class="overlay"></div>
+					<div class="center gavatar">
+						<a href="/" class="profile_gavatar"><img class="circle" src="/assets/img/saber.jpg"></a>
+					</div>
+					<div class="address">
+						<h5><span class="fa fa-map-marker"></span> Hangzhou, China</h5>
+					</div>
+					<div class="center profile_desc">
+						技术<br>生活<br>和爱情<br>记录点滴 珍藏回忆<br>
+					</div>
+				</div>
+				
+				<div class="tag-cloud-text">
+					<a href="http://rann.cc/pages/class.html" title="分类" class="pjaxlink"><p class="center">分类</p></a>
+				</div>
+				<div class="tag-cloud ">	
+					<hr>
+					<div class="page-tag">
+							
+								<a href="http://lemonjing.github.io/pages/class.html#算法" name="算法" class="pjaxlink">算法(19)</a>
+							
+								<a href="http://lemonjing.github.io/pages/class.html#Java" name="Java" class="pjaxlink">Java(41)</a>
+							
+								<a href="http://lemonjing.github.io/pages/class.html#随笔" name="随笔" class="pjaxlink">随笔(19)</a>
+							
+								<a href="http://lemonjing.github.io/pages/class.html#技术" name="技术" class="pjaxlink">技术(17)</a>
+							
+								<a href="http://lemonjing.github.io/pages/class.html#求职" name="求职" class="pjaxlink">求职(3)</a>
+							
+								<a href="http://lemonjing.github.io/pages/class.html#读书" name="读书" class="pjaxlink">读书(1)</a>
+							
+								<a href="http://lemonjing.github.io/pages/class.html#大数据" name="大数据" class="pjaxlink">大数据(13)</a>
+							
+					</div>					
+				</div>
+				<div class="clear"></div>
+
+				<div class="tag-cloud-text">
+					<a href="http://rann.cc/pages/tags.html" title="标签" class="pjaxlink"><p class="center">标签【点我】</p></a>
+				</div>
+				<div class="tag-cloud ">	
+					<hr>
+					<div class="page-tag">
+							
+								
+								<a href="http://lemonjing.github.io/pages/tags.html#原创" name="原创" class="pjaxlink"><i class="fa fa-tags"></i>原创(57)</a>
+								
+							
+								
+								<a href="http://lemonjing.github.io/pages/tags.html#Algorithm" name="Algorithm" class="pjaxlink"><i class="fa fa-tags"></i>Algorithm(19)</a>
+								
+							
+								
+							
+								
+							
+								
+							
+								
+								<a href="http://lemonjing.github.io/pages/tags.html#背包" name="背包" class="pjaxlink"><i class="fa fa-tags"></i>背包(3)</a>
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+								<a href="http://lemonjing.github.io/pages/tags.html#JavaSE" name="JavaSE" class="pjaxlink"><i class="fa fa-tags"></i>JavaSE(11)</a>
+								
+							
+								
+								<a href="http://lemonjing.github.io/pages/tags.html#随笔" name="随笔" class="pjaxlink"><i class="fa fa-tags"></i>随笔(14)</a>
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+								<a href="http://lemonjing.github.io/pages/tags.html#JavaWeb" name="JavaWeb" class="pjaxlink"><i class="fa fa-tags"></i>JavaWeb(3)</a>
+								
+							
+								
+							
+								
+							
+								
+								<a href="http://lemonjing.github.io/pages/tags.html#校招" name="校招" class="pjaxlink"><i class="fa fa-tags"></i>校招(3)</a>
+								
+							
+								
+							
+								
+							
+								
+								<a href="http://lemonjing.github.io/pages/tags.html#Spring" name="Spring" class="pjaxlink"><i class="fa fa-tags"></i>Spring(10)</a>
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+								<a href="http://lemonjing.github.io/pages/tags.html#NIO" name="NIO" class="pjaxlink"><i class="fa fa-tags"></i>NIO(13)</a>
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+							
+								
+								<a href="http://lemonjing.github.io/pages/tags.html#Spark" name="Spark" class="pjaxlink"><i class="fa fa-tags"></i>Spark(9)</a>
+								
+							
+								
+								<a href="http://lemonjing.github.io/pages/tags.html#Scala" name="Scala" class="pjaxlink"><i class="fa fa-tags"></i>Scala(3)</a>
+								
+							
+								
+							
+								
+							
+					</div>					
+				</div>
+				<div class="clear"></div>
+
+	 			<div class="recentuse">
+	 					<p>GitHub项目</p>
+	 					<hr>
+	 					<ul>
+	 						<li><a href = "https://github.com/it-interview/easy-job" target="_blank">互联网求职面试知识复习</a></li>
+	 						<li><a href = "https://github.com/Lemonjing/LightweightApp" target="_blank">集成LBS查询、音乐、阅读的微信公众账号</a></li>
+	 						<li><a href = "https://github.com/Lemonjing/hadoop-dedup" target="_blank">基于hadoop和hbase的大规模海量数据去重</a></li>
+	 						<li><a href = "https://github.com/Lemonjing/TinyMooc" target="_blank">轻量级Java平台在线幕课学习网站</a></li>
+		 					<li><a href = "https://github.com/Lemonjing/Keccak" target="_blank">SHA-3 algorithm Keccak Implementation</a></li>
+		 					<li><a href = "https://github.com/Lemonjing/your-offer" target="_blank">剑指offer的Scala实现</a></li>
+	 					</ul>
+	 			</div>
+	 			
+	 			<div class="recentuse">
+	 					<p>经常出没</p>
+	 					<hr>
+	 					<ul>
+	 						<li><a href = "http://music.163.com/#/user/home?id=63589002" target="_blank">网易云音乐</a></li>
+	 						<li><a href = "https://github.com/Lemonjing" target="_blank">GitHub</a></li>
+	 						<li><a href = "http://weibo.com/u/1662536394" target="_blank">微博</a></li>
+	 						<li><a href = "http://pianke.me/pages/user/user.html?uid=1924980" target="_blank">片刻</a></li>
+		 					<li><a href = "https://www.zhihu.com/people/xmusaber" target="_blank">知乎</a></li>
+		 					<li><a href = "http://www.nowcoder.com/profile/213475" target="_blank">牛客</a></li>
+	 					</ul>
+	 			</div>
+				
+				<div class="friendlink">
+	 					<p>友情链接</p>
+	 					<hr>					
+		 				<a href = "https://imjad.cn/" target="_blank">AD's Blog</a></br>
+						<a href = "http://zyl.me" target="_blank">ZYL的博客</a></br>
+						<a href = "http://mxwu.cn" target="_blank">梦忻屋</a></br>
+						<a href = "http://www.weiyanweiyu.cn" target="_blank">微言微语</a></br>
+						<a href = "http://jloong.com" target="_blank">楚书业</a></br>
+						<a href = "https://emiria.io/" target="_blank">蔓舞寻樱</a></br>
+						<a href = "http://www.xiaokang.info" target="_blank">小康博客</a><br>
+						<a href = "http://blog.iov.me" target="_blank">随心说</a></br>
+						<a href = "http://czduban.com" target="_blank">以歌。先生</a><br>
+						<a href = "http://5mx.net/" target="_blank">冷夜博客</a><br>
+						<a href = "http://www.8hao.com.cn/" target="_blank">艳莜日记</a><br>
+						<a href = "http://blog.sunxyz.cn/" target="_blank">诸葛扬阳</a><br>
+						<a href = "https://lostyou.love/" target="_blank">邻居</a><br>
+						<a href = "http://www.kurodown.com/" target="_blank">酷绒站</a>
+	 			</div>
+				
+			</div>
+			
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 box-shadow fadein-right aside2">					 		
+					<div class="page-content" id="pjax"><div class="post">
+  <header class="post-header">
+    <h1 class="post-title">【Spark】Spark Streaming中复杂的多流Join方案的一个实现</h1>
+    <div class="info">
+	    <p class="post-meta"><i class="fa fa-calendar"></i>&nbsp;2018-05-23</p>
+	    
+		<i class="fa fa-tags"></i>
+		<span class="index-post-tag">
+		
+			<a class="pjaxlink" href="/pages/tags.html#原创">原创</a>
+		
+			<a class="pjaxlink" href="/pages/tags.html#Spark">Spark</a>
+		
+		</span>
+	    
+	    <i class="fa fa-eye"></i>访问量<span id="busuanzi_value_page_pv">-1</span>	
+    </div>
+  </header>
+
+  <article class="post-content">
+    <p>问题：多个不同流根据一定规则join的问题（例如：网约车中订单发单流与接单流join问题）</p>
+
+<h2 id="问题">问题</h2>
+
+<p>描述：多个不同流根据一定规则join的问题（例如：网约车中订单发单流与接单流join问题）</p>
+
+<p>特点：</p>
+<ul>
+  <li>不同流需要join的数据时间跨度较长（例如：发单与接单时间跨度最长一周之久）</li>
+  <li>数据源格式不定 （例如：binlog数据和业务日志的join）</li>
+  <li>join规则多样化</li>
+  <li>系统要求吞吐量大（订单表流量是5M/s） 、延迟低（秒级）</li>
+</ul>
+
+<h2 id="分析">分析</h2>
+
+<p>显然根据窗口实现是不可取的，首先多流之间跨度较大，窗口无法支持时间跨度这么大的延迟。为此，我们需要一个高效的，具有持久化功能的Cache服务，来缓存先到的流。</p>
+
+<p>并且针对特殊业务，我们需要支持流的保序性。流的保序性是我定义的一个说法（或名词），它指的是如果数据流中存在多张表的数据，而这些表依照一个次序由业务发过来。（如业务数据落到MySQL Binlog，然后可以按照订单id partition到Kafka Topic）我们在下游处理过程和Join的过程中，需要对流中的分表保序。保序要注意的几点是可以按照主键id（订单id）取哈希作为partition key，确保同样主键的数据落到下游同partition的topic，值得注意的一点是，如果Executor端使用了Producer池的话，要确保采用同一个Producer发送。可采取主键id的哈希值对池大小取模的方式来做。</p>
+
+<p>这里保序主要为了确保多流Join时如果有非对等流，即某一个流到达后需要输出它的相关字段，即使没有Join上。（如成单的数据，业务确保了成单状态一定出现在创建订单之前）。</p>
+
+<h2 id="方案">方案</h2>
+
+<p>为了解决上述的多流Join问题，进行了如下的方案实现。</p>
+
+<p><img src="https://raw.githubusercontent.com/Lemonjing/DevUtil/master/github/join.png" alt="" /></p>
+
+<p>1.通过在Spark Streaming引擎中封装一套Cache服务（可读写外部KV存储，如Fusion、HBase），对先到达的数据流Cache住。2.将各种Join的规则配置化引入引擎，根据Join的场景按需选择规则进行应用。在Join过程中，缓存流在Join上之前一直保持，Join上后进行释放。（这里可能会涉及到KV存储remove操作的性能问题，可进行put的替代或假删）</p>
+
+<p>注：通过引入外部KV存储后，对于作业的延迟或异常问题，也需要关注KV存储（如Fusion、HBase）的集群运行情况。</p>
+
+<p>本人系作者原创，欢迎Spark、Flink等大数据技术方面的探讨。</p>
+
+<p>ps：公众号已正式接入图灵机器人，快去和我聊聊吧。</p>
+
+<center>-END-</center>
+
+<div align="center">
+<img src="http://rann.cc/assets/img/qrcode-logo.png" width="340" height="400" />
 </div>
+
+<blockquote>
+  <p>本文系本人个人公众号「梦回少年」原创发布，扫一扫加关注。</p>
+</blockquote>
+	
+  </article>
+  <div id="container"></div>
+<!-- <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> -->
+<script>
+var gitment = new Gitment({
+  id: window.location.pathname, // 可选。默认为 location.href
+  owner: 'lemonjing',
+  repo: 'lemonjing.github.io',
+  oauth: {
+    client_id: 'd434df4970edfd9beba6',
+    client_secret: '72e0e4bc8d7dd8f6abb250576aa1f1b6e6f67c1b',
+  },
+})
+gitment.render('container')
+</script>
 </div>
-          </div>
-        </div>
+
+  <div class="prevandnext">
+    	  
+	    <div style="margin:0.5em;">
+	    <span>上一篇 ：</span><a class="pjaxlink" href="http://rann.cc/2018/08/23/sql-optimized-principles.html"  title="【SQL】SQL优化器原理——查询优化器综述">【SQL】SQL优化器原理——查询优化器综述</a>
+	    </div>
+	  
+  	  
+	    <div style="margin:0.5em;">
+	    <span>下一篇 ：</span><a class="pjaxlink" href="http://rann.cc/2017/12/23/spark-hostname-issues.html"  title="【Spark】Spark针对https和IPv6的主机名处理的两个issue分析">【Spark】Spark针对https和IPv6的主机名处理的两个issue分析</a>
+	    </div>
+	  
+	  	<div style="margin:0.5em;">
+			<span> 版权所有，转载时必须以链接形式注明原始出处</span>
+	    </div>
+	 
+  </div></div>		
+			</div>
+ 		</div>	
+	</div>
+    </div> 
+</div>
+	<div class="profile_social">
+		<a class="rss" href="/feed.xml" target="_blank"></a>
+		<a class="github" href="https://github.com/lemonjing"  target="_blank"></a>
+		<a class="weibo" href="http://weibo.com/u/1662536394"  target="_blank"></a>
+	</div>
+    <div id="backtotop">
+    		<a href="#"><i class="fa fa-arrow-circle-up"></i></a>
+    </div>
+    <div class="pjax_loading"></div>
+    
+    <footer class="site-footer">
+  <div class="wrapper">
+
+    <h2 class="footer-heading">saber's blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li>梦回少年</li>
+          <li><a href="mailto:xmusaber@163.com">xmusaber@163.com</a></li>
+          <li>闽ICP备15018990号</li>
+        </ul>
       </div>
-      <a href="#" class="publication-viewer-next-link"></a> <a href="#" class="publication-viewer-previous-link"></a>
-    </div>
-    <div class="banner success js-report-success">
-        <p class="message">Your report has been submitted.</p>
-    </div>
-    <div class="banner error js-report-error">
-        <p class="message">There was a problem submitting your report. Please contact <a href="http://helpx.adobe.com/support.html">Adobe Support</a>.</p>
-    </div>
-    <!-- REPORT ABUSE DIALOG -->
-    <div class="report-abuse-dialog js-report-abuse-dialog">
-      <div class="report-abuse-dialog-scrim">
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a class="github" href="https://github.com/lemonjing"  target="_blank"></a>
+          </li>
+          
+
+          
+          <li>
+            <a class="weibo" href="http://weibo.com/u/1662536394"  target="_blank"></a>
+          </li>
+          
+        </ul>
       </div>
+      <div class="footer-col  footer-col-3">
+        <p class="text">If,<br/>for example,<br/>you come at four o'clock in the afternoon,<br/>then at three o'clock I shall begin to be happy.</p>
+      </div>
+    </div>
+</div>
+    <div class="center sitedesc">
+    	Powered by <a href ="http://jekyllrb.com/">Jekyll</a>  |  © 2018 梦回少年  |  Hosted on <a href="https://github.com/lemonjing/lemonjing.github.io"> Github</a></div>
+    <div class="center sitedesc"><span id=span_dt_dt></span>&nbsp;&nbsp;|&nbsp;&nbsp;<span id="busuanzi_container_site_pv" style='display:none'>本站总访问量<span id="busuanzi_value_site_pv"></span>次<br/>
+    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1276104568'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s5.cnzz.com/z_stat.php%3Fid%3D1276104568%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+    </div>
 
-      <div class="report-abuse-dialog-content">
-        <div class="spinner-modal js-spinner-modal">
-          <div class="spinner-modal-spinner"></div>
-        </div>
-        <div class="header">
-          <h1>Report Abuse</h1>
-          <button title="Close" class="btn-close btn-reportabuse-close js-report-abuse-close"><em class="sprite30x30">Close</em></button>
-        </div>
+<!-- 访问统计 -->
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-        <div class="report-abuse-dialog-content-inner">
-          <div class="article">
-            <div class="report-abuse-dialog-article-contents">
-              <form class="report-abuse-form js-report-abuse-form">
+<!-- 萌萌哒运行 -->
+  <SCRIPT language=javascript>          
+function show_date_time(){
+window.setTimeout("show_date_time()", 1000);
+BirthDay=new Date("8/15/2015 11:30:00");//这个日期是可以修改的
+today=new Date();
+timeold=(today.getTime()-BirthDay.getTime());
+sectimeold=timeold/1000
+secondsold=Math.floor(sectimeold);
+msPerDay=24*60*60*1000
+e_daysold=timeold/msPerDay
+daysold=Math.floor(e_daysold);
+e_hrsold=(e_daysold-daysold)*24;
+hrsold=Math.floor(e_hrsold);
+e_minsold=(e_hrsold-hrsold)*60;
+minsold=Math.floor((e_hrsold-hrsold)*60);
+seconds=Math.floor((e_minsold-minsold)*60);
+span_dt_dt.innerHTML="本站已萌萌哒运行"+daysold+"天"+hrsold+"小时"+minsold+"分"+seconds+"秒";
+}show_date_time();</SCRIPT>
 
-                <p>If you feel that this video content violates the Adobe <a href="http://www.adobe.com/go/tou" target="_blank">Terms of Use</a>, you may report this content by filling out this quick form.</p>
+  <!-- jQuery -->
+  <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/assets/js/jquery.pjax.js"></script>
+  <!-- Bootstrap Core JavaScript -->
+  <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/assets/js/prettify/prettify.js"></script>
 
-                <ul class="group info">
-                  <li>
-                    <label id="email-label" for="email"><strong>Your Email</strong> <b></b></label>
-                    <input id="email" name="email" type="email">
-                  </li>
-                  <li>
-                    <label id="name-label" for="name"><strong>Your Name</strong> <b></b></label>
-                    <input id="name" name="name" type="text">
-                  </li>
-                </ul>
-                <p></p>
+  <!-- jekyII search-->
+<div class="cb-search-tool" style="position: fixed; top: 0px ; bottom: 0px; left: 0px; right:  0px;
+      opacity: 0.95; background-color: #111111; z-index: 9999; display: none;">
+    <input type="text" class="form-control cb-search-content" id="cb-search-content" style="position: fixed; top: 60px" placeholder="文章标题 日期 标签" >
 
-                <label id="radio-label"><strong>Why are you reporting this content?</strong><b></b></label>
+    <div style="position: fixed; top: 16px; right: 16px;">
+        <img src="/search/img/cb-close.png"  id="cb-close-btn"/>
+    </div>
+</div>
 
-                <ul class="radio">
-                  <li>
-                    <input type="radio" id="def" name="type" value="defamation">
-                    <label for="def">Defamation</label>
-                  </li>
-                  <li>
-                    <input type="radio" id="tra" name="type" value="trademark">
-                    <label for="tra">Trademark Infringement</label>
-                  </li>
-                  <li>
-                    <input type="radio" id="off" name="type" value="vulgar">
-                    <label for="off">Offensive Content</label>
-                  </li>
-                  <li>
-                    <input type="radio" id="rac" name="type" value="hate">
-                    <label for="rac">Racist or Hate Content</label>
-                  </li>
-                  <li>
-                    <input type="radio" id="exp" name="type" value="pornography">
-                    <label for="exp">Sexually Explicit Content</label>
-                  </li>
-                  <li>
-                    <input type="radio" id="oth" name="type" value="other">
-                    <label for="oth">Other</label>
-                  </li>
-                </ul>
+<!-- <div style="position: fixed; right: 16px; bottom: 20px;">
+    <img src="/search/img/cb-search.png"  id="cb-search-btn"  title="双击ctrl试一下"/>
+</div> -->
 
-                <ul>
-                  <li>
-                    <label id="desc-label"><strong>Please provide a description of your concern.</strong><b></b></label>
-                    <textarea maxlength="1024" name="description" rows="4" id="description"></textarea>
-                  </li>
-                </ul>
+<link rel="stylesheet" href="/search/css/cb-search.css">
 
-                <p class="notice">To report a copyright violation, please follow the DMCA section in the <a href="http://www.adobe.com/go/tou" target="_blank">Terms of Use</a>.</p>
+<script src="/search/js/bootstrap3-typeahead.min.js"></script>
+<script src="/search/js/cb-search.js"></script>
+<!-- jekyII search end -->
 
-                <div class="buttons">
-                    <button type="button" class="button cancel js-report-abuse-cancel">Cancel </button>
-                    <input type="submit" class="button" value="Report Abuse" >
-                </div>
-              </form>
-            </div><!--dialog-article-contents-->
-          </div><!--article-->
-        </div><!--dialog-content-inner-->
-      </div><!--dialog-content-->
-    </div><!--report-abuse-dialog-->
-  </div>
-  <!-- javascripts go here -->
-    <script type="text/javascript">window.useNewBumper = true; window.brandType = 'default';</script>
-    <script type="text/javascript" src="https://d6uhzlpot4xwe.cloudfront.net/runtime/1.22/runtime-prod.gz.js" charset="utf-8"></script>
-  <!--BEGIN-BUMPER-BEHAVIORS-->
-  <!--END-BUMPER-BEHAVIORS-->
-</body>
+  
+<script type="text/javascript" src="http://echarts.baidu.com/build/dist/echarts.js"></script>
+<script type="text/javascript" src="/assets/js/main.js"></script>
+
+</footer>
+
+  </body>
+
 </html>
