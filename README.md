@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
-		<meta http-equiv="refresh" content="0;url=https://spark.adobe.com/page/jXxnCAJzs2ZXY/">
 	</head>
+	<body>
+		<a href="https://spark.adobe.com/page/jXxnCAJzs2ZXY/"></a>
+		<a href="javascript:gogo()">触发js->location跳转</a>
+	</body>
 </html>
