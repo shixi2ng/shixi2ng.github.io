@@ -1,2 +1,2 @@
-<script href="https://spark.adobe.com/page/jXxnCAJzs2ZXY/" target="_self">
-</script>
+<a href="https://spark.adobe.com/page/jXxnCAJzs2ZXY/" target="_self">
+</a>
