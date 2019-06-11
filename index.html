@@ -43,14 +43,26 @@
     </nav>
     <!-- END nav -->
 
-    <section class="probootstrap_cover_v3 overflow-hidden relative text-center" id="section-home" style="background:url(assets/images/bg1.jpeg) no-repeat 10% 10%;">
+    <section class="probootstrap_cover_v3 overflow-hidden relative text-center" id="section-home" style="background:url(assets/images/bg1.jpeg) no-repeat 50% 50% 10%;">
       <div class="overlay"></div>
       <a class="ytp_player" data-property="{videoURL:'',containment:'#section-home', showControls:false, autoPlay:true, loop:true, mute:true, startAt:40, opacity:1, quality:'default'}"></a>
       <div class="container">
         <div class="row align-items-center justify-content-center">
           <div class="col-md">
             <h2 class="heading mb-2 probootstrap-animate"><span font-family="Times">Xi Shi | <span font-family="Times">石 希</span></h2>
-            <p class="lead mb-5 probootstrap-animate"></p>
+            <p class="lead mb-5 probootstrap-animate"><script language="javaScript">
+now = new Date(),hour = now.getHours()
+if(hour < 6){document.write("凌晨好！")}
+else if (hour < 9){document.write("早上好！")}
+else if (hour < 12){document.write("上午好！")}
+else if (hour < 14){document.write("中午好！")}
+else if (hour < 17){document.write("下午好！")}
+else if (hour < 19){document.write("傍晚好！")}
+else if (hour < 22){document.write("晚上好！")}
+else {document.write("夜里好！")}
+
+</script>
+</p>
             <p class="probootstrap-animate">
               <a href="onepage.html" role="button" class="btn btn-primary p-3 mr-3 pl-5 pr-5 text-uppercase d-lg-inline d-md-inline d-sm-block d-block mb-3">See OnePage Verion</a>
             </p>
